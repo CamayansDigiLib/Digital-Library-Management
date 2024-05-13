@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Code Scanner</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f8f8f8;
+        display: flex;
+        align-items: center; /* Vertically center the content */
+        justify-content: center; /* Horizontally center the content */
+        min-height: 100vh; /* Ensure the container covers the full viewport height */
+        flex-direction: column;
+      }
+      #container {
+        max-width: 600px;
+        padding: 20px;
+        background-color: white;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        text-align: center;
+        display: flex;
+        align-items: center; /* Vertically center the content */
+        justify-content: center; /* Horizontally center the content */
+        flex-direction: column;
+        gap: 1em;
+      }
+
+      button,
+      .btn {
+        margin-top: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        cursor: pointer;
+        border-radius: 5px;
+        margin: 1em;
+        text-decoration: none;
+      }
+      #refreshButton {
+        display: none;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div id="reader"></div>
+      <h2 id="scanResultText"></h2>
+      <button id="refreshButton" onclick="refreshScanner()">New Scan</button>
+    </div>
+
+    <script src="https://unpkg.com/html5-qrcode"></script>
+    <script>
+      // Function to handle successful QR code scans
+      function onScanSuccess(decodedText, decodedResult) {
+        console.log(`Scan result: ${decodedText}`, decodedResult);
+
+        var success = false;
+        var details = "";
+
+        if (decodedText === "https://get-qr.com/MUB1I7") {
+          success = true;
+          details = "Title: The Love Hypothesis<br/>Author: Ali Hazelwood<br/>Date Published: September 14, 2021";
+        } else if (decodedText === "https://get-qr.com/YX7EZc") {
+          success = true;
+          details = "Title: It Ends With Us<br/>Author: Coleen Hoover<br/>Date Published: August 2, 2016";
+        } else if (decodedText === "https://get-qr.com/1VX0J0") {
+          success = true;
+          details = "Title: Atomic Habits<br/>Author: James Clear<br/>Date Published: October 16, 2018";
+        } else if (decodedText === "https://get-qr.com/rs_jzO") {
+          success = true;
+          details = "Title: The Strength In Our Scars<br/>Author: Bianca Sparacino<br/>Date Published: September 2017";
+        }
+
+        if (success) {
+          localStorage.setItem("scannedDetails", details);
+          window.location.href = "success.html";
+        } else {
+          document.getElementById("scanResultText").textContent = `Scan result: ${decodedText}`;
+        }
+        html5QrcodeScanner.clear();
+        document.getElementById("refreshButton").style.display = "block";
+      }
+
+      // Function to refresh the QR code scanner
+      function refreshScanner() {
+        location.reload(true);
+      }
+
+      // Initialize the QR code scanner
+      var html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: 250 });
+
+      // Render the QR code scanner with the defined success callback
+      html5QrcodeScanner.render(onScanSuccess);
+    </script>
+  </body>
+</html>

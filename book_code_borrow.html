@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Code Borrowing</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            color: #800000;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #800000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #800080;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Book Code Borrowing</h1>
+        <label for="book-code">Enter Book Code:</label>
+        <input type="text" id="book-code">
+        <button onclick="confirmBook()">Confirm Book</button>
+        <label for="due-date">Select Due Date:</label>
+        <select id="due-date">
+            <option value="1">1 Day</option>
+            <option value="2">2 Days</option>
+            <option value="3">3 Days</option>
+            <option value="4">4 Days</option>
+            <option value="5">5 Days</option>
+            <!-- Add more options as needed -->
+        </select>
+        <label for="book-condition">Select Book Condition:</label>
+        <select id="book-condition">
+            <option value="good">Good</option>
+            <option value="fair">Fair</option>
+            <option value="poor">Poor</option>
+        </select>
+        <button onclick="borrowBook()">Borrow</button>
+    </div>
+
+    <script>
+        function confirmBook() {
+            var books = {
+                "001": {
+                    title: "The Love Hypothesis",
+                    author: "Ali Hazelwood",
+                    datePublished: "September 14, 2021"
+                },
+                "002": {
+                    title: "It Ends With Us",
+                    author: "Coleen Hoover",
+                    datePublished: "August 2, 2016"
+                },
+                "003": {
+                    title: "Atomic Habits",
+                    author: "James Clear",
+                    datePublished: "October 16, 2018"
+                },
+                "004": {
+                    title: "The Strength In Our Scars",
+                    author: "Bianca Sparacino",
+                    datePublished: "September 2017"
+                }
+            };
+
+            var bookCode = document.getElementById("book-code").value;
+            var dueDate = document.getElementById("due-date").value;
+            var bookCondition = document.getElementById("book-condition").value;
+
+            if (books.hasOwnProperty(bookCode)) {
+                var details = books[bookCode];
+                // Redirect to the dashboard with the details as query parameters
+                window.location.href = `dashboard.html?title=${encodeURIComponent(details.title)}&author=${encodeURIComponent(details.author)}&datePublished=${encodeURIComponent(details.datePublished)}&dueDate=${encodeURIComponent(dueDate)}&bookCondition=${encodeURIComponent(bookCondition)}`;
+            } else {
+                alert("Book details not found.");
+            }
+        }
+
+        function borrowBook() {
+            var bookCode = document.getElementById("book-code").value;
+            var dueDate = document.getElementById("due-date").value;
+            var bookCondition = document.getElementById("book-condition").value;
+
+            if (bookCode.trim() === "") {
+                alert("Please enter a book code.");
+                return;
+            }
+
+            if (dueDate.trim() === "") {
+                alert("Please select a due date.");
+                return;
+            }
+
+            if (bookCondition.trim() === "") {
+                alert("Please select a book condition.");
+                return;
+            }
+
+            // Save borrowed book data to localStorage
+            localStorage.setItem("borrowedBook", JSON.stringify({
+                bookCode: bookCode,
+                dueDate: dueDate,
+                bookCondition: bookCondition
+            }));
+
+            // Redirect to the dashboard
+            window.location.href = "dashboard.html";
+        }
+    </script>
+</body>
+</html>

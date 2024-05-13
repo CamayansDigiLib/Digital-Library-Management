@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #800000;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            border: 2px solid #800000;
+            border-radius: 8px;
+        }
+
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        th {
+            background-color: #800000;
+            color: #ffffff;
+            border-right: 1px solid #800000;
+        }
+
+        tr:nth-child(even) td {
+            background-color: #f2f2f2;
+        }
+
+        .clear-button, .borrow-button, .logout-button {
+            background-color: #800000;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+            display: block;
+            margin: 10px auto;
+            width: 150px;
+            text-align: center;
+        }
+
+        .clear-button:hover, .borrow-button:hover, .logout-button:hover {
+            background-color: #800080;
+        }
+    </style>
+</head>
+<body>
+    <h1>Scanned Records</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>QR Code Content</th>
+                <th>Date Scanned</th>
+                <th>Due Date</th>
+                <th>Book Condition</th>
+            </tr>
+        </thead>
+        <tbody id="recordsTable">
+            <!-- Records will be dynamically added here -->
+        </tbody>
+    </table>
+    
+    <button onclick="scanAgain()" class="borrow-button">Borrow Again</button>
+    <button class="clear-button" onclick="clearRecords()">Clear Records</button>
+
+    <!-- Add logout button -->
+    <button class="logout-button" onclick="logout()">Logout</button>
+
+    <script>
+        // Retrieve records from localStorage
+        var records = JSON.parse(localStorage.getItem("scannedRecords")) || [];
+        var borrowedBook = JSON.parse(localStorage.getItem("borrowedBook"));
+
+        // Function to display records in the table
+        function displayRecords() {
+            var tableBody = document.getElementById("recordsTable");
+            tableBody.innerHTML = "";
+
+            records.forEach(function(record) {
+                var row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${record.content}</td>
+                    <td>${record.date}</td>
+                    <td>${calculateDueDate(record.date, record.timeRemaining)}</td>
+                    <td>${record.bookCondition}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+
+            // Check if a book is borrowed
+            if (borrowedBook) {
+                var borrowedRow = document.createElement("tr");
+                borrowedRow.innerHTML = `
+                    <td>${borrowedBook.title}</td>
+                    <td>${getCurrentDate()}</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                `;
+                tableBody.appendChild(borrowedRow);
+            }
+        }
+
+        // Display existing records when the page loads
+        displayRecords();
+
+        // Function to calculate the due date based on the scanned date and time remaining
+        function calculateDueDate(scannedDate, timeRemaining) {
+            var dueDate = new Date(scannedDate);
+            dueDate.setDate(dueDate.getDate() + parseInt(timeRemaining));
+            return dueDate.toLocaleDateString(); // Format due date as a string
+        }
+
+        // Function to get the current date in the format MM/DD/YYYY
+        function getCurrentDate() {
+            var today = new Date();
+            var dd = String(today.getDate()).padStart(2, '0');
+            var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+            var yyyy = today.getFullYear();
+            return mm + '/' + dd + '/' + yyyy;
+        }
+
+        // Redirect function
+        function scanAgain() {
+            window.location.href = "choose_method.html";
+        }
+
+        // Function to clear records stored in localStorage
+        function clearRecords() {
+            localStorage.removeItem("scannedRecords");
+            localStorage.removeItem("borrowedBook");
+            location.reload();
+        }
+
+        // Function to logout
+        function logout() {
+            // Clear user session or perform logout operation
+            // For demonstration purposes, let's clear localStorage
+            localStorage.clear();
+            // Redirect to the login page
+            window.location.href = "login.html";
+        }
+    </script>
+</body>
+</html>

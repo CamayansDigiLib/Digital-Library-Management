@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choose Borrowing Method</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            color: #800000;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #800000;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 10px;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #800080;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <h1>Choose Borrowing Method</h1>
+        <button onclick="redirectToScanningPage()">Scan to Borrow</button>
+        <button onclick="redirectToBookCodePage()">Use Book Code to Borrow</button>
+    </div>
+
+    <script>
+        // Function to redirect to the scanning page
+        function redirectToScanningPage() {
+            window.location.href = "scanning.html";
+        }
+
+        // Function to redirect to the book code borrowing page
+        function redirectToBookCodePage() {
+            window.location.href = "book_code_borrow.html";
+        }
+    </script>
+</body>
+</html>
